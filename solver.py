@@ -2,12 +2,12 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from algorithm import ThomasAlgorithm
-from  drawplot import DrawPlot
+from drawplot import DrawPlot
 
 
 class Solver:
     @staticmethod
-    def run_with_fixed_n(n):
+    def run_with_fixed_n(n: int):
         problem = ThomasAlgorithm(n)
         uxs = np.linspace(0, 1, n)
         uys = problem.analysis(uxs)

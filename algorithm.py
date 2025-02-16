@@ -1,8 +1,10 @@
 import math
+from typing import List, Tuple
+from numpy import ndarray, float64
 
 
 class ThomasAlgorithm:
-    def __init__(self, n):
+    def __init__(self, n: int):
         self.n = n
         self.h = 1 / n
         self.mu1 = 10
@@ -12,17 +14,22 @@ class ThomasAlgorithm:
         self.B = 12 / (self.h ** 2)
         self.C = 24 / (self.h ** 2) + 5
 
+
     @staticmethod
-    def analysis(x):
+    def analysis(
+        x: ndarray[float64] | int | float
+    ) -> ndarray[float64] | int | float:
         """Аналитическое решение."""
         return 10 + 90 * (x ** 2)
 
+
     @staticmethod
-    def right_sade(x):
+    def right_sade(x: float) -> float:
         """Правая часть уравнения."""
         return -2110 + 450 * (x ** 2)
 
-    def solve(self):
+
+    def solve(self) -> Tuple[List[float], List[float]]:
         """Решение краевой задачи методом прогонки."""
         ai = [self.kappa1]
         bi = [self.mu1]
@@ -46,7 +53,12 @@ class ThomasAlgorithm:
 
         return xi, yi[::-1]
 
+
     @classmethod
-    def compute_error(cls, xs, ys):
+    def compute_error(
+        cls,
+        xs: list[int],
+        ys: list[float]
+    ) -> float:
         """Максимальное отклонение численного решения от аналитического."""
         return max(math.fabs(cls.analysis(xs[i]) - ys[i]) for i in range(len(xs)))
