@@ -3,15 +3,13 @@ import numpy as np
 
 
 class DrawPlot:
-
     @staticmethod
     def plot(
         i: int,
         xs: np.ndarray[np.float64] | list[int],
         ys: np.ndarray[np.float64] | list[int],
-        title: str
+        title: str,
     ) -> None:
-
         plt.subplot(2, 1, i)
         plt.title(title)
 
