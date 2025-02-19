@@ -13,13 +13,15 @@ class Solver:
         uys = problem.analysis(uxs)
         vxs, vys = problem.solve()
 
+        z = ThomasAlgorithm.compute_error(vxs, vys)
+
         # Рисуем два графика на одной координатной оси
         if flg_draw:
-            print(f"z = {ThomasAlgorithm.compute_error(vxs, vys)}")
+            print(f"z = {z}")
 
-            DrawPlot.plot_one(uxs, uys, "U(x)", color="b", style="-")  # Синий сплошной
+            DrawPlot.plot_one(uxs, uys, "U(x) - Точное решение", color="b", style="-")  # Синий сплошной
             DrawPlot.plot_one(
-                vxs, vys, "V(x)", color="r", style="--"
+                vxs, vys, "V(x) - Приближённое решение", color="r", style="--", z = z, n = n
             )  # Красный пунктирный
 
             plt.xlabel("x")
@@ -29,7 +31,6 @@ class Solver:
             plt.legend()
             plt.show()
         else:
-            z = ThomasAlgorithm.compute_error(vxs, vys)
             print(f"Итераций n = {n}, z = {z}")
 
     @staticmethod

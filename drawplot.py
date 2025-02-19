@@ -23,6 +23,9 @@ class DrawPlot:
 
     @staticmethod
     def plot_one(
-        xs: np.ndarray, ys: np.ndarray, label: str, color: str, style: str
+        xs: np.ndarray, ys: np.ndarray, label: str, color: str, style: str, z = None, n = None
     ) -> None:
-        plt.plot(xs, ys, linestyle=style, color=color, label=label)
+        if z is None:
+            plt.plot(xs, ys, linestyle=style, color=color, label=label)
+        else:
+            plt.plot(xs, ys, linestyle=style, color=color, label=label+f'\nИтераций: {n}'+f"\nz = {z}")
