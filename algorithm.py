@@ -10,9 +10,9 @@ class ThomasAlgorithm:
         self.mu1 = 10
         self.mu2 = 100
         self.kappa1 = self.kappa2 = 0
-        self.A = 12 / (self.h**2)
-        self.B = 12 / (self.h**2)
-        self.C = 24 / (self.h**2) + 5
+        # self.A = 12 / (self.h**2)
+        # self.B = 12 / (self.h**2)
+        # self.C = 24 / (self.h**2) + 5
 
     @staticmethod
     def analysis(x: ndarray[float64] | int | float) -> ndarray[float64] | int | float:
@@ -33,9 +33,11 @@ class ThomasAlgorithm:
         for i in range(1, self.n):
             _xi = i * self.h
             xi.append(_xi)
-            a = self.B / (self.C - self.A * ai[i - 1])  # формула #TODO
-            b = (self.right_sade(_xi) + self.A * bi[i - 1]) / (
-                self.C - self.A * ai[i - 1]
+            a = (
+                12 / (self.h**2) / (24 / (self.h**2) + 5 - 12 / (self.h**2) * ai[i - 1])
+            )  # формула
+            b = (self.right_sade(_xi) + 12 / (self.h**2) * bi[i - 1]) / (
+                24 / (self.h**2) + 5 - 12 / (self.h**2) * ai[i - 1]
             )
             ai.append(a)
             bi.append(b)
