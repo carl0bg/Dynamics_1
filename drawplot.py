@@ -4,7 +4,7 @@ import numpy as np
 
 class DrawPlot:
     @staticmethod
-    def plot(
+    def plot_two(
         i: int,
         xs: np.ndarray[np.float64] | list[int],
         ys: np.ndarray[np.float64] | list[int],
@@ -20,3 +20,9 @@ class DrawPlot:
         plt.yticks(np.arange(0, 110, 10))
         plt.grid()
         plt.plot(np.array(xs), np.array(ys))
+
+    @staticmethod
+    def plot_one(
+        xs: np.ndarray, ys: np.ndarray, label: str, color: str, style: str
+    ) -> None:
+        plt.plot(xs, ys, linestyle=style, color=color, label=label)

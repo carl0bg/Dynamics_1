@@ -33,7 +33,7 @@ class ThomasAlgorithm:
         for i in range(1, self.n):
             _xi = i * self.h
             xi.append(_xi)
-            a = self.B / (self.C - self.A * ai[i - 1])
+            a = self.B / (self.C - self.A * ai[i - 1])  # формула #TODO
             b = (self.right_sade(_xi) + self.A * bi[i - 1]) / (
                 self.C - self.A * ai[i - 1]
             )
@@ -55,4 +55,6 @@ class ThomasAlgorithm:
     @classmethod
     def compute_error(cls, xs: list[int], ys: list[float]) -> float:
         """Максимальное отклонение численного решения от аналитического."""
-        return max(math.fabs(cls.analysis(xs[i]) - ys[i]) for i in range(len(xs)))
+        return max(
+            math.fabs(cls.analysis(xs[i]) - ys[i]) for i in range(len(xs))
+        )  # находим z погрешность
