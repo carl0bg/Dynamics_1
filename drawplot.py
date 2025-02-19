@@ -28,4 +28,5 @@ class DrawPlot:
         if z is None:
             plt.plot(xs, ys, linestyle=style, color=color, label=label)
         else:
-            plt.plot(xs, ys, linestyle=style, color=color, label=label+f'\nИтераций: {n}'+f"\nz = {z}")
+            label = f"{label} \nz = {z}, итераций: {n}"
+            plt.plot(xs, ys, linestyle=style, color=color, label=label)
