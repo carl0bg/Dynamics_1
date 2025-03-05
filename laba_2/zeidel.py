@@ -20,7 +20,7 @@ class Zeidel:
         self.x: np.ndarray = np.ones(self.n, dtype=float)
 
     @staticmethod
-    def norm(x: np.ndarray) -> float:
+    def norma(x: np.ndarray) -> float:
         """Вычисляет норму Чебышева (максимальное абсолютное значение вектора)."""
         return float(np.max(np.abs(x)))
 
@@ -31,7 +31,7 @@ class Zeidel:
 
     def residual(self) -> np.ndarray:
         """Вычисляет вектор невязки Ax - b."""
-        return self.A @ self.x - self.b
+        return np.dot(self.A, self.x) - self.b
 
     def check_matrix(self) -> bool:
         """Проверяет, является ли матрица симметричной и положительно определённой."""
@@ -52,7 +52,7 @@ class Zeidel:
                 self.x[i] = (self.b[i] - sum1 - sum2) / self.A[i, i]
 
             error_vector = self.accuracy(x_old, self.x)
-            error_norm = self.norm(error_vector)
+            error_norm = self.norma(error_vector)
 
             if error_norm <= self.epsilon:
                 epsilon_reached = True
@@ -67,7 +67,7 @@ class Zeidel:
             error_vector.tolist(),
             epsilon_reached,
             residual_vector.tolist(),
-            float(self.norm(residual_vector)),
+            float(self.norma(residual_vector)),
         )
 
     def run(self):
@@ -88,7 +88,7 @@ class Zeidel:
             residual_norm,
         ) = self.solve()
         exact_error_vector = self.accuracy(np.array(x, dtype=float), self.x_star)
-        exact_error = self.norm(exact_error_vector)
+        exact_error = self.norma(exact_error_vector)
 
         print("\nЧисленное решение:", x)
         print(f"Точность: {error_norm}, по компонентам: {error_vector}")
