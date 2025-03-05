@@ -23,7 +23,13 @@ class DrawPlot:
 
     @staticmethod
     def plot_one(
-        xs: np.ndarray, ys: np.ndarray, label: str, color: str, style: str, z = None, n = None
+        xs: np.ndarray,
+        ys: np.ndarray,
+        label: str,
+        color: str,
+        style: str,
+        z=None,
+        n=None,
     ) -> None:
         if z is None:
             plt.plot(xs, ys, linestyle=style, color=color, label=label)

@@ -19,9 +19,11 @@ class Solver:
         if flg_draw:
             print(f"z = {z}")
 
-            DrawPlot.plot_one(uxs, uys, "U(x) - Точное решение", color="b", style="-")  # Синий сплошной
             DrawPlot.plot_one(
-                vxs, vys, "V(x) - Приближённое решение", color="r", style="--", z = z, n = n
+                uxs, uys, "U(x) - Точное решение", color="b", style="-"
+            )  # Синий сплошной
+            DrawPlot.plot_one(
+                vxs, vys, "V(x) - Приближённое решение", color="r", style="--", z=z, n=n
             )  # Красный пунктирный
 
             plt.xlabel("x")
