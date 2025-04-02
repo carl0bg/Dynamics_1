@@ -4,7 +4,7 @@ import numpy as np
 
 
 def main():
-    s = input("Enter grid size: ")
+    s = input("Введите размер сетки: ")
 
     if s:
         n = int(s)
