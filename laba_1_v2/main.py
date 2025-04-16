@@ -30,6 +30,12 @@ def main():
         Plotter.make_plot(4, vxs_opt2, vys_opt2, "V(x) (Opt 2)")
         Plotter.show()
 
+        Solver.run_with_fixed_n(10)
+        Solver.run_with_fixed_n(100)
+        Solver.run_with_fixed_n(1000)
+        Solver.run_with_fixed_n(10000)
+        Solver.run_with_fixed_n(100000)
+
 
 if __name__ == "__main__":
     main()

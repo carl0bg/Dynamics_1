@@ -92,3 +92,4 @@ media
 venv
 settings.py
 *.json
+custom

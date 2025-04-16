@@ -2,6 +2,11 @@ from dataclasses import dataclass, field
 from typing import List, Tuple
 import math
 
+import numpy as np
+from matplotlib import pyplot as plt
+
+from algorithm import ThomasAlgorithm
+from drawplot import DrawPlot
 
 @dataclass
 class Solver:
@@ -14,6 +19,35 @@ class Solver:
 
     def __post_init__(self) -> None:
         self.h = 1 / self.n
+
+    @staticmethod
+    def run_with_fixed_n(n: int, flg_draw: bool = False):
+        problem = ThomasAlgorithm(n)
+        uxs = np.linspace(0, 1, n)
+        uys = problem.analysis(uxs)
+        vxs, vys = problem.solve()
+
+        z = ThomasAlgorithm.compute_error(vxs, vys)
+
+        # Рисуем два графика на одной координатной оси
+        if flg_draw:
+            print(f"z = {z}")
+
+            DrawPlot.plot_one(
+                uxs, uys, "U(x) - Точное решение", color="b", style="-"
+            )  # Синий сплошной
+            DrawPlot.plot_one(
+                vxs, vys, "V(x) - Приближённое решение", color="r", style="--", z=z, n=n
+            )  # Красный пунктирный
+
+            plt.xlabel("x")
+            plt.ylabel("y")
+            plt.yticks(np.arange(0, 110, 10))
+            plt.grid()
+            plt.legend()
+            plt.show()
+        else:
+            print(f"Итераций n = {n}, z = {z}")
 
     @staticmethod
     def u(x: float) -> float:
