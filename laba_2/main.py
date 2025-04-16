@@ -1,7 +1,7 @@
 from utils import read_input_file
 from zeidel import Zeidel
 
-
+# test
 if __name__ == "__main__":
     nmax = int(input("Введите максимальное число итераций (nmax): "))
     epsilon = float(input("Введите требуемую точность (epsilon): "))
