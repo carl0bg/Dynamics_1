@@ -126,10 +126,10 @@ if __name__ == '__main__':
 
     def update(frame):
         plt.cla()
-        ax.plot(x, grid1[frame], '-', color = 'orange', label = 'method 1')
-        ax.plot(x, grid2[frame], '-', color = 'red', label = 'method 2')
-        ax.plot(x, grid3[frame], '-', color = 'black', label = 'method 3')
-        ax.plot(x, generate_precise(target, a, frame, hx, n, tau), '-', color = 'green', label = 'precise')
+        ax.plot(x, grid1[frame], '-', color='yellow', label='method 1')
+        ax.plot(x, grid2[frame], '--', color='blue', label='method 2')
+        ax.plot(x, grid3[frame], '-.', color='green', label='method 3')
+        ax.plot(x, generate_precise(target, a, frame, hx, n, tau), ':', color='red', label='precise')
         plt.legend()
 
     ani = animation.FuncAnimation(fig, update, frames=m, interval=30)
