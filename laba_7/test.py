@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     def update(frame):
         plt.cla()
-        ax.plot(x, grid[frame], '-')
+        ax.plot(x, grid[frame], '-', color = 'red')
         plt.legend()
 
     ani = animation.FuncAnimation(fig, update, frames=m, interval=30)
