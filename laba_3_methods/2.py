@@ -6,21 +6,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import pi
 
-
+# Граничные условия (cos(pi k x) * cos(pi k y))
 def mu(i, j, grid):
     x = i * grid.h
-    y = j * grid.m
-    if i == 0 or i == grid.n or j == 0 or j == grid.m:
+    y = j * grid.k
+    if i == 0 or i == grid.n or j == 0 or j == grid.k:
         return math.cos(pi * grid._k * x) * math.cos(pi * grid._k * y)
     return 0
 
-
+# Правая часть уравнения (нулевая, уравнение Лапласа)
 def f(i, j, grid):
     return 0
 
-
-def u(x, y):
-    return 0
+# Аналитическое решение
+def u(x, y, k=1):
+    # return 0
+    return np.cos(pi * k * x) * np.cos(pi * k * y)
 
 
 class Grid:
@@ -53,7 +54,7 @@ class Grid:
         self.X, self.Y = np.meshgrid(self.x, self.y)
 
         if u:
-            self.uv = np.array(u(np.ravel(self.X), np.ravel(self.Y)))
+            self.uv = u(np.ravel(self.X), np.ravel(self.Y), self._k)
 
         for j in range(m + 1):
             self.grid.append([0] * (n + 1))
@@ -132,7 +133,7 @@ class Grid:
 
 
 if __name__ == '__main__':
-    grid = Grid(1, 1, 20, 20, f, mu, 1.5, 1)
+    grid = Grid(1, 1, 20, 20, f, mu, 1.5, 1, u)
     max_iterations = 10000
     iterations, acc, error = grid.solve(1e-14, max_iterations)
     print(tabulate.tabulate([['Количество итераций', f'{iterations}/{max_iterations}'],
