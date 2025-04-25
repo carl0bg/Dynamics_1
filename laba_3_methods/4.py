@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from dataclasses import dataclass, field
 import tabulate
 
-
+# Граничные условия 
 def mu(i, j, h, k):
     x = i * h
     y = j * k
@@ -75,6 +75,8 @@ class SeidelSolver:
                             xw = math.sqrt(1 - (j * p.k) ** 2) + 4
                             x = i * p.h
                             alpha = (xw - x) / p.h
+                            if alpha == 0:
+                                continue
                             a_star_corr = -2 * (p.k_star + p.h_star / alpha)
                             self.grid[j][i] = (up + down + 2 * (left / (1 + alpha) +
                                                                right / (alpha * (1 + alpha)))) / -a_star_corr
@@ -83,6 +85,8 @@ class SeidelSolver:
                             yw = math.sqrt(1 - (i * p.h - 4) ** 2)
                             y = j * p.k
                             beta = (y - yw) / p.k
+                            if beta == 0:
+                                continue
                             a_star_corr = -2 * (p.h_star + p.k_star / beta)
                             self.grid[j][i] = (left + right + 2 * (up / (1 + beta) +
                                                                   down / (beta * (1 + beta)))) / -a_star_corr
