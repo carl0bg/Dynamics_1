@@ -103,12 +103,12 @@ def generate_precise(u0, a, i, h, n, tau):
 
 
 def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
-    # Выбираем каждую 10-ю точку для отображения (чтобы таблица не была слишком большой)
-    step_size = max(1, len(x_vals) // 20)
+    # Выбираем точки с шагом, кратным h_x (например, каждые 5 узлов для читаемости)
+    step_size = 5  # Шаг в 5*0.0833 ≈ 0.4167 (можно изменить)
     indices = range(0, len(x_vals), step_size)
     
     table_data = []
-    headers = ["x (h_x={:.4f})".format(h_x), "Method 1", "Method 2", "Precise", "Error 1", "Error 2"]
+    headers = ["x (шаг h_x={:.4f})".format(h_x), "Method 1", "Method 2", "Precise", "Error 1", "Error 2"]
     
     for i in indices:
         x = x_vals[i]
@@ -117,11 +117,17 @@ def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
         pr = precise[i]
         error1 = abs(m1 - pr)
         error2 = abs(m2 - pr)
-        table_data.append([f"{x:.2f}", f"{m1:.4f}", f"{m2:.4f}", f"{pr:.4f}", f"{error1:.4f}", f"{error2:.4f}"])
+        table_data.append([
+            f"{x:.4f}",  # 4 знака после запятой для точности
+            f"{m1:.4f}", 
+            f"{m2:.4f}", 
+            f"{pr:.4f}", 
+            f"{error1:.4f}", 
+            f"{error2:.4f}"
+        ])
     
-    print(f"\nComparison at time step {step} (t = {step*h_t:.2f}, h_t = {h_t:.4f}):")
+    print(f"\nСравнение на шаге {step} (t = {step*h_t:.2f}, h_t = {h_t:.4f}):")
     print(tabulate(table_data, headers=headers, tablefmt="grid", stralign="center"))
-
 
 a = 2
 w = 15
