@@ -108,7 +108,7 @@ def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
     indices = range(0, len(x_vals), step_size)
     
     table_data = []
-    headers = ["x (шаг h_x={:.4f})".format(h_x), "Method 1", "Method 2", "Precise", "Error 1", "Error 2"]
+    headers = ["x (шаг h_x={:.4f})".format(h_x), "Method 1", "Method 2", "Precise", "delta 1", "delta 2"]
     
     for i in indices:
         x = x_vals[i]
