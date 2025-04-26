@@ -113,7 +113,12 @@ class GridSolver:
 
     def plot(self):
         fig, ax = plt.subplots()
-        cs = ax.contourf(self.X, self.Y, self.grid)
+        # Устанавливаем фиксированные vmin и vmax
+        vmin = np.min(self.grid)
+        vmax = np.max(self.grid)
+
+        cs = ax.contourf(self.X, self.Y, self.grid, vmin=0, vmax=0.65)
+
         fig.colorbar(cs)
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
@@ -124,7 +129,7 @@ class GridSolver:
 
 
 if __name__ == '__main__':
-    problem = PoissonProblem(A=5, b=0)
+    problem = PoissonProblem(A=5, b=3)
     solver = GridSolver(width=1, height=1, n=20, m=20, problem=problem)
 
     max_iter = 1000
