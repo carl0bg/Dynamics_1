@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.animation as animation
 from tabulate import tabulate
-import time as time_module  # Переименовываем модуль time, чтобы избежать конфликта
+import time as time_module
 
 
 def create_grid(length, total_time, n, m, u0, mu):
     grid = []
     h = length / n
-    t = total_time / m  # Используем параметр total_time вместо time_slice
+    t = total_time / m
     for j in range(m):
         grid.append([0] * n)
     for i in range(n):
@@ -104,8 +104,7 @@ def generate_precise(u0, a, i, h, n, tau):
 
 
 def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
-    # Выбираем точки с шагом, кратным h_x (например, каждые 5 узлов для читаемости)
-    step_size = 5  # Шаг в 5*0.0833 ≈ 0.4167 (можно изменить)
+    step_size = 5
     indices = range(0, len(x_vals), step_size)
     
     table_data = []
@@ -119,7 +118,7 @@ def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
         error1 = abs(m1 - pr)
         error2 = abs(m2 - pr)
         table_data.append([
-            f"{x:.4f}",  # 4 знака после запятой для точности
+            f"{x:.4f}",
             f"{m1:.4f}", 
             f"{m2:.4f}", 
             f"{pr:.4f}", 
@@ -134,8 +133,8 @@ def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
 a = 2
 w = 15
 total_time = 10  # Переименовываем переменную, чтобы избежать конфликта с модулем time
-n = w * 12  # число пространственных узлов
-m = total_time * 25  # число временных шагов
+n = w * 120  # число пространственных узлов
+m = total_time * 250  # число временных шагов
 h_x = w / n
 h_t = total_time / m
 
@@ -144,25 +143,20 @@ if __name__ == '__main__':
     target = u0_3
     grid1, hx, tau = create_grid(w, total_time, n, m, target, mu)
     grid2, hx, tau = create_grid(w, total_time, n, m, target, mu)
-    # grid3, hx, tau = create_grid(w, h, n, m, target, mu)
+    
     c = abs(a) * tau / hx
     if c > 1:
         print('Не сходится: c = ', c)
-        print(tau, hx)
         exit(1)
     
     print(f"Initial parameters:")
-    print(f"h_x (space step) = {h_x:.6f}")
-    print(f"h_t (time step) = {h_t:.6f}")
-    print(f"CFL number (a*h_t/h_x) = {c:.4f}\n")
+    print(f"h_x = {h_x:.6f}, h_t = {h_t:.6f}, CFL = {c:.4f}\n")
     
     grid1 = solve1(grid1, a, hx, tau)
     grid2 = solve2(grid2, a, hx, tau)
-    # grid3 = solve3(grid3, a, hx, tau)
     
     x_vals = np.linspace(0, w, n)
     
-    # Выводим таблицы сравнения каждую секунду
     steps_per_second = int(1 / h_t)
     for second in range(1, total_time + 1):
         step = second * steps_per_second
@@ -180,13 +174,12 @@ if __name__ == '__main__':
         current_time = frame * h_t
         ax.plot(x, grid1[frame], '-', color='orange', label=f'method 1 (time={current_time:.2f})')
         ax.plot(x, grid2[frame], '--', color='blue', label=f'method 2 (time={current_time:.2f})')
-        # ax.plot(x, grid3[frame], '-.', color='green', label='method 3')
         ax.plot(x, generate_precise(target, a, frame, hx, n, tau), ':', color='red', label='precise')
         plt.legend()
         
-        # Останавливаем анимацию на 4 секунде (100 кадров при 25 кадрах/сек)
-        if frame == 100:
-            plt.pause(6)  # Пауза на 6 секунд
+        # Останавливаем анимацию на 3 секунде (frame = 3/h_t)
+        if abs(current_time - 2.0) < h_t/2:
+            plt.pause(10)  # Пауза на 2 секунды
 
     ani = animation.FuncAnimation(fig, update, frames=m, interval=30)
     plt.show()
