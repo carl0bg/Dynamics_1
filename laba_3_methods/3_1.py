@@ -214,10 +214,19 @@ class GridSolver:
         ax.add_patch(rect)
 
         plt.show()
+
+        # fig = plt.figure()
+        # ax = fig.add_subplot(111, projection='3d')
+        # ax.plot_surface(self.X, self.Y, Z, cmap='viridis', edgecolor='none')
+        # ax.set_xlabel('X')
+        # ax.set_ylabel('Y')
+        # ax.set_zlabel('U(x, y)')
+        # ax.set_title("3D решение")
+        # plt.show()
     
 if __name__ == '__main__':
     grid = GridSolver(2, 1, 20, 20, f, mu, u)
-    max_iterations  = 10000
+    max_iterations = 10000
     iterations, acc, error = grid.solve(1e-14, max_iterations)
     
     # Вывод основной информации
@@ -240,9 +249,9 @@ if __name__ == '__main__':
                 result_table.append([
                     f'{x:.5f}', 
                     f'{y:.5f}', 
-                    f'{numerical:.10f}', 
-                    f'{exact:.10f}', 
-                    f'{error:.10f}'
+                    f'{numerical:.6f}', 
+                    f'{exact:.6f}', 
+                    f'{error:.6f}'
                 ])
 
     print(tabulate.tabulate(
