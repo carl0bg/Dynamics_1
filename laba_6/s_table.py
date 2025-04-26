@@ -102,13 +102,13 @@ def generate_precise(u0, a, i, h, n, tau):
     return grid
 
 
-def print_comparison_table(step, x_vals, method1, method2, precise):
+def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
     # Выбираем каждую 10-ю точку для отображения (чтобы таблица не была слишком большой)
     step_size = max(1, len(x_vals) // 20)
     indices = range(0, len(x_vals), step_size)
     
     table_data = []
-    headers = ["x", "Method 1", "Method 2", "Precise", "Error 1", "Error 2"]
+    headers = ["x (h_x={:.4f})".format(h_x), "Method 1", "Method 2", "Precise", "Error 1", "Error 2"]
     
     for i in indices:
         x = x_vals[i]
@@ -119,14 +119,14 @@ def print_comparison_table(step, x_vals, method1, method2, precise):
         error2 = abs(m2 - pr)
         table_data.append([f"{x:.2f}", f"{m1:.4f}", f"{m2:.4f}", f"{pr:.4f}", f"{error1:.4f}", f"{error2:.4f}"])
     
-    print(f"\nComparison at time step {step} (t = {step*tau:.2f}):")
+    print(f"\nComparison at time step {step} (t = {step*h_t:.2f}, h_t = {h_t:.4f}):")
     print(tabulate(table_data, headers=headers, tablefmt="grid", stralign="center"))
 
 
 a = 2
 w = 15
 time = 10
-n = w * 12  # число пространсвенных узлов
+n = w * 12  # число пространственных узлов
 m = time * 25  # число временных шагов
 h_x = w / n
 h_t = time / m
@@ -142,20 +142,26 @@ if __name__ == '__main__':
         print('Не сходится: c = ', c)
         print(tau, hx)
         exit(1)
+    
+    print(f"Initial parameters:")
+    print(f"h_x (space step) = {h_x:.6f}")
+    print(f"h_t (time step) = {h_t:.6f}")
+    print(f"CFL number (a*h_t/h_x) = {c:.4f}\n")
+    
     grid1 = solve1(grid1, a, hx, tau)
     grid2 = solve2(grid2, a, hx, tau)
     # grid3 = solve3(grid3, a, hx, tau)
     
-    x_vals = np.linspace(0, w, nяя)
+    x_vals = np.linspace(0, w, n)
     
     # Выводим таблицы сравнения каждую секунду
-    steps_per_second = int(1 / tau)
+    steps_per_second = int(1 / h_t)
     for second in range(1, time + 1):
         step = second * steps_per_second
         if step >= m:
             break
         precise_solution = generate_precise(target, a, step, hx, n, tau)
-        print_comparison_table(step, x_vals, grid1[step], grid2[step], precise_solution)
+        print_comparison_table(step, x_vals, grid1[step], grid2[step], precise_solution, h_x, h_t)
     
     fig, ax = plt.subplots()
     x = np.linspace(0, w, n)
