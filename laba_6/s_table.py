@@ -125,14 +125,17 @@ def print_comparison_table(step, x_vals, method1, method2, precise):
 
 a = 2
 w = 15
-h = 10
+time = 10
 n = w * 12  # число пространсвенных узлов
-m = h * 25  # число временных шагов
+m = time * 25  # число временных шагов
+h_x = w / n
+h_t = time / m
+
 
 if __name__ == '__main__':
     target = u0_3
-    grid1, hx, tau = create_grid(w, h, n, m, target, mu)
-    grid2, hx, tau = create_grid(w, h, n, m, target, mu)
+    grid1, hx, tau = create_grid(w, time, n, m, target, mu)
+    grid2, hx, tau = create_grid(w, time, n, m, target, mu)
     # grid3, hx, tau = create_grid(w, h, n, m, target, mu)
     c = abs(a) * tau / hx
     if c > 1:
@@ -143,11 +146,11 @@ if __name__ == '__main__':
     grid2 = solve2(grid2, a, hx, tau)
     # grid3 = solve3(grid3, a, hx, tau)
     
-    x_vals = np.linspace(0, w, n)
+    x_vals = np.linspace(0, w, nяя)
     
     # Выводим таблицы сравнения каждую секунду
     steps_per_second = int(1 / tau)
-    for second in range(1, h + 1):
+    for second in range(1, time + 1):
         step = second * steps_per_second
         if step >= m:
             break
