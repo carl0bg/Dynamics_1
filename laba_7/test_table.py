@@ -119,7 +119,7 @@ h_x = w / n
 h_t = total_time / m
 
 if __name__ == '__main__':
-    target = u0_3
+    target = u0_0
 
     grid, hx, tau = create_grid(w, total_time, n, m, target, mu)
 
