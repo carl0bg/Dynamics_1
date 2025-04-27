@@ -40,10 +40,13 @@ def u0_2(x):
         return 0.5 * (1 + sin(2 * pi * (x - 1) - pi / 2)) # синусоидальный импульс
     
 def u0_3(x):
-    if x < 0 or x > 1:
+    if x < -1 or x > 1:
         return 0
     else:
-        return 1 - x**2  # функция для половины параболы
+        return 1 + x**2  # функция для половины параболы
+
+# def mu(t):
+#     return -0.05 * t
 
 def mu(t):
     return 0
@@ -115,7 +118,8 @@ def print_combined_solution_table(time_step, x_vals1, solution1, x_vals2, soluti
             f"{diff:.6f}"
         ])
     
-    print(f"\nСравнение решений при t = {time_step*h_t:.2f}:")
+    # print(f"\nСравнение решений при t = {time_step*h_t:.2f}:")
+    print(f"\n t = {time_step*h_t:.2f}, h_t = {h_t:.4f}:")
     print(tabulate(table_data, headers=headers, tablefmt="grid", stralign="center"))
 
 v = 0.05 # к-ф вязкости
@@ -123,7 +127,7 @@ w = 15 # x
 total_time = 10 # t
 
 if __name__ == '__main__':
-    target = u0_0
+    target = u0_3
 
     # Первая сетка (точная)
     n1 = w * 12
@@ -162,7 +166,8 @@ if __name__ == '__main__':
         grid1[time_step], 
         x_vals2, 
         grid2[time_step], 
-        tau1
+        tau1,
+        # h_x
     )
 
     # Визуализация
@@ -170,7 +175,7 @@ if __name__ == '__main__':
     ax.xaxis.set_major_locator(plt.MultipleLocator(1))
 
     plt.title(f"Сравнение решений, t = {tau1 * time_step:.2f}")
-    plt.plot(x_vals1, grid1[time_step], '-', label=f"Точная сетка (n={n1})")
-    plt.plot(x_vals2, grid2[time_step], '--', label=f"Грубая сетка (n={n2})")
+    plt.plot(x_vals1, grid1[time_step], '-', label=f"Сетка 1 (n={n1})")
+    plt.plot(x_vals2, grid2[time_step], '--', label=f"Сетка 2 (n={n2})")
     plt.legend()
     plt.show()

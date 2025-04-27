@@ -177,7 +177,7 @@ if __name__ == '__main__':
         # plt.grid()
 
     # Создаем анимацию
-    if False:
+    if True:
         ani = animation.FuncAnimation(fig, update, frames=m1, interval=30, repeat=False)
     else:
         update(time_step2)
