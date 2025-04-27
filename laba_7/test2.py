@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.animation as animation
 
-# Тут всё аналогично, но хз, работает оно или нет
-# Вроде на правду похоже, DeepSeek не возражает
 
 def create_grid(length, time_slice, n, m, u0, mu):
     grid = []
@@ -86,24 +84,18 @@ def solve(grid, a, h, tau):
     for t in range(1, len(grid)):
         solve_single(t, grid, a, h, tau)
 
-a = 0.05 # к-ф вязкости, выбран для наглядности
+a = 0.05 # к-ф вязкости
 w = 15 # x
-h = 10 # t
-n = w * 10
-m = h * 20
+total_time = 10 # t
+n = w * 10  # число пространственных узлов
+m = total_time * 20  # число временных шагов
 
-targets = [u0_0, u0_1, u0_2]
 
 if __name__ == '__main__':
-    s = int(input('u0: '))
 
-    # Выбор н.у
-    if s < 1 or s > len(targets):
-        print('u0 should be 1, 2 or 3')
-        exit(1)
-    target = targets[s - 1]
+    target = u0_0
 
-    grid, hx, tau = create_grid(w, h, n, m, target, mu)
+    grid, hx, tau = create_grid(w, total_time, n, m, target, mu)
 
     solve(grid, a, hx, tau)
 
