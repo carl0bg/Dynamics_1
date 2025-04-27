@@ -103,11 +103,11 @@ def print_solution_table(time_step, x_vals, solution, h_x, h_t):
     print(f"\n t = {time_step*h_t:.2f}, h_t = {h_t:.4f}:")
     print(tabulate(table_data, headers=headers, tablefmt="grid", stralign="center"))
 
-a = 0.05 # к-ф вязкости
+v = 0.05 # к-ф вязкости
 w = 15 # x
 total_time = 10 # t
-n = w * 10  # число пространственных узлов
-m = total_time * 20  # число временных шагов
+n = w * 12  # число пространственных узлов
+m = total_time * 25  # число временных шагов
 h_x = w / n
 h_t = total_time / m
 
@@ -116,7 +116,7 @@ if __name__ == '__main__':
 
     grid, hx, tau = create_grid(w, total_time, n, m, target, mu)
 
-    solve(grid, a, hx, tau)
+    solve(grid, v, hx, tau)
 
     x_vals = np.linspace(0, w, n)
 
