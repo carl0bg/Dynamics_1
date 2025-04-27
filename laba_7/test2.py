@@ -22,7 +22,7 @@ def create_grid(length, time_slice, n, m, u0, mu):
     return grid, h, t
 
 def u0_0(x):
-    return 1.0 if 1 <= x <= 2 else 0.0
+    return 1.0 if 1 <= x <= 2 else 0.0  # прямоугольный импульс
 
 def u0_1(x):
     if x < 1 or x > 2:
@@ -30,13 +30,20 @@ def u0_1(x):
     elif x >= 1 and x < 1.5:
         return 2 * (x - 1)
     else:
-        return 1 - 2 * (x - 1.5)
+        return 1 - 2 * (x - 1.5) # треугольный импульс
 
 def u0_2(x):
     if x < 1 or x > 2:
         return 0
     else:
-        return 0.5 * (1 + sin(2 * pi * (x - 1) - pi / 2))
+        return 0.5 * (1 + sin(2 * pi * (x - 1) - pi / 2)) # синусоидальный импульс
+    
+
+def u0_3(x):
+    if x < 0 or x > 1:
+        return 0
+    else:
+        return 1 - x**2  # функция для половины параболы
 
 def mu(t):
     return 0
