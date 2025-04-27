@@ -1,4 +1,4 @@
-from math import sin, pi
+from math import sin, pi, fabs
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.animation as animation
@@ -90,22 +90,32 @@ def solve(grid, a, h, tau):
     for t in range(1, len(grid)):
         solve_single(t, grid, a, h, tau)
 
-def print_solution_table(time_step, x_vals, solution, h_x, h_t):
+def print_combined_solution_table(time_step, x_vals1, solution1, x_vals2, solution2, h_t):
     table_data = []
     headers = [
-        "x (шаг h_x={:.4f})".format(h_x),
-        "Значение u(x, t={:.2f})".format(time_step * h_t)
+        "x",
+        "U1 (n=180)",
+        "U2 (n=90)",
+        "Diff (U1-U2)"
     ]
     
-    for i in range(len(x_vals)):
-        x = x_vals[i]
-        val = solution[i]
+    # Интерполируем решение с более грубой сетки на более точную
+    interp_solution2 = np.interp(x_vals1, x_vals2, solution2)
+    
+    for i in range(len(x_vals1)):
+        x = x_vals1[i]
+        val1 = solution1[i]
+        val2 = interp_solution2[i]
+        diff = fabs(val1 - val2)
+        
         table_data.append([
             f"{x:.4f}",
-            f"{val:.6f}"
+            f"{val1:.6f}",
+            f"{val2:.6f}",
+            f"{diff:.6f}"
         ])
     
-    print(f"\n t = {time_step*h_t:.2f}, h_t = {h_t:.4f}:")
+    print(f"\nСравнение решений при t = {time_step*h_t:.2f}:")
     print(tabulate(table_data, headers=headers, tablefmt="grid", stralign="center"))
 
 v = 0.05 # к-ф вязкости
@@ -115,16 +125,16 @@ total_time = 10 # t
 if __name__ == '__main__':
     target = u0_0
 
-    # Первая сетка (исходные параметры)
+    # Первая сетка (точная)
     n1 = w * 12
     m1 = total_time * 25
     grid1, hx1, tau1 = create_grid(w, total_time, n1, m1, target, mu)
     solve(grid1, v, hx1, tau1)
     x_vals1 = np.linspace(0, w, n1)
 
-    # Вторая сетка (другие параметры)
-    n2 = w * 6  # в 2 раза меньше узлов по пространству
-    m2 = total_time * 25  # теперь одинаковое количество временных шагов
+    # Вторая сетка (грубая)
+    n2 = w * 6
+    m2 = total_time * 25  # одинаковое количество временных шагов
     grid2, hx2, tau2 = create_grid(w, total_time, n2, m2, target, mu)
     solve(grid2, v, hx2, tau2)
     x_vals2 = np.linspace(0, w, n2)
@@ -136,7 +146,7 @@ if __name__ == '__main__':
             if 0 <= input_time <= total_time:
                 break
             else:
-                print("Ошибка: время должно быть в диапазоне [0, {}]".format(total_time))
+                print(f"Ошибка: время должно быть в диапазоне [0, {total_time}]")
         except ValueError:
             print("Ошибка: введите числовое значение")
 
@@ -145,25 +155,22 @@ if __name__ == '__main__':
     if time_step >= len(grid1):
         time_step = len(grid1) - 1
 
-    # Выводим таблицы для выбранного времени
-    print("\nРешение на первой сетке (n={}, m={}):".format(n1, m1))
-    print_solution_table(time_step, x_vals1, grid1[time_step], hx1, tau1)
-    
-    print("\nРешение на второй сетке (n={}, m={}):".format(n2, m2))
-    print_solution_table(time_step, x_vals2, grid2[time_step], hx2, tau2)
+    # Выводим объединенную таблицу
+    print_combined_solution_table(
+        time_step, 
+        x_vals1, 
+        grid1[time_step], 
+        x_vals2, 
+        grid2[time_step], 
+        tau1
+    )
 
+    # Визуализация
     fig, ax = plt.subplots()
     ax.xaxis.set_major_locator(plt.MultipleLocator(1))
 
-    # Функция для отображения одного кадра
-    def show_frame(frame):
-        plt.cla()
-        plt.title(f"Сравнение решений, t = {tau1 * frame:.2f}")
-            
-        ax.plot(x_vals1, grid1[frame], '-', label=f"Сетка 1 (n={n1}, m={m1})")
-        ax.plot(x_vals2, grid2[frame], '--', label=f"Сетка 2 (n={n2}, m={m2})")
-        plt.legend()
-
-    # Показываем выбранный кадр
-    show_frame(time_step)
+    plt.title(f"Сравнение решений, t = {tau1 * time_step:.2f}")
+    plt.plot(x_vals1, grid1[time_step], '-', label=f"Точная сетка (n={n1})")
+    plt.plot(x_vals2, grid2[time_step], '--', label=f"Грубая сетка (n={n2})")
+    plt.legend()
     plt.show()
