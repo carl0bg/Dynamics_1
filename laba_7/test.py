@@ -80,7 +80,7 @@ n = w * 10
 m = h * 20
 
 if __name__ == '__main__':
-    target = u0_1
+    target = u0_2
 
     grid, hx, tau = create_grid(w, h, n, m, target, mu)
 
