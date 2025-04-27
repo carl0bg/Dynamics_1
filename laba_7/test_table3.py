@@ -39,7 +39,6 @@ def u0_2(x):
     else:
         return 0.5 * (1 + sin(2 * pi * (x - 1) - pi / 2)) # синусоидальный импульс
     
-
 def u0_3(x):
     if x < 0 or x > 1:
         return 0
@@ -87,7 +86,6 @@ def solve_single(t, grid, nu, h, tau):
     for i in range(n - 2, -1, -1):
         curr[i] = alpha[i + 1] * curr[i + 1] + beta[i + 1]
 
-
 def solve(grid, a, h, tau):
     for t in range(1, len(grid)):
         solve_single(t, grid, a, h, tau)
@@ -113,19 +111,23 @@ def print_solution_table(time_step, x_vals, solution, h_x, h_t):
 v = 0.05 # к-ф вязкости
 w = 15 # x
 total_time = 10 # t
-n = w * 12  # число пространственных узлов
-m = total_time * 25  # число временных шагов
-h_x = w / n
-h_t = total_time / m
 
 if __name__ == '__main__':
     target = u0_0
 
-    grid, hx, tau = create_grid(w, total_time, n, m, target, mu)
+    # Первая сетка (исходные параметры)
+    n1 = w * 12
+    m1 = total_time * 25
+    grid1, hx1, tau1 = create_grid(w, total_time, n1, m1, target, mu)
+    solve(grid1, v, hx1, tau1)
+    x_vals1 = np.linspace(0, w, n1)
 
-    solve(grid, v, hx, tau)
-
-    x_vals = np.linspace(0, w, n)
+    # Вторая сетка (другие параметры)
+    n2 = w * 6  # в 2 раза меньше узлов по пространству
+    m2 = total_time * 25  # теперь одинаковое количество временных шагов
+    grid2, hx2, tau2 = create_grid(w, total_time, n2, m2, target, mu)
+    solve(grid2, v, hx2, tau2)
+    x_vals2 = np.linspace(0, w, n2)
 
     # Запрос времени у пользователя
     while True:
@@ -138,27 +140,30 @@ if __name__ == '__main__':
         except ValueError:
             print("Ошибка: введите числовое значение")
 
-    # Находим ближайший временной шаг
-    time_step = int(round(input_time / h_t))
-    if time_step >= len(grid):
-        time_step = len(grid) - 1
+    # Используем одинаковый временной шаг для обоих сеток
+    time_step = int(round(input_time / tau1))
+    if time_step >= len(grid1):
+        time_step = len(grid1) - 1
 
-    # Выводим таблицу для выбранного времени
-    print_solution_table(time_step, x_vals, grid[time_step], h_x, h_t)
+    # Выводим таблицы для выбранного времени
+    print("\nРешение на первой сетке (n={}, m={}):".format(n1, m1))
+    print_solution_table(time_step, x_vals1, grid1[time_step], hx1, tau1)
+    
+    print("\nРешение на второй сетке (n={}, m={}):".format(n2, m2))
+    print_solution_table(time_step, x_vals2, grid2[time_step], hx2, tau2)
 
     fig, ax = plt.subplots()
-    x = np.linspace(0, w, n)
     ax.xaxis.set_major_locator(plt.MultipleLocator(1))
 
-    def update(frame):
+    # Функция для отображения одного кадра
+    def show_frame(frame):
         plt.cla()
-        plt.title(f"t = {tau * frame:.2f}")
-        ax.plot(x, grid[frame], '-')
+        plt.title(f"Сравнение решений, t = {tau1 * frame:.2f}")
+            
+        ax.plot(x_vals1, grid1[frame], '-', label=f"Сетка 1 (n={n1}, m={m1})")
+        ax.plot(x_vals2, grid2[frame], '--', label=f"Сетка 2 (n={n2}, m={m2})")
         plt.legend()
 
-    if True:
-        ani = animation.FuncAnimation(fig, update, frames=m, interval=30, repeat=False)
-    else:
-        update(time_step)
-
+    # Показываем выбранный кадр
+    show_frame(time_step)
     plt.show()
