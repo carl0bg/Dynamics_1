@@ -121,7 +121,7 @@ m = h * 200
 # tau / h < 0.5
 
 if __name__ == '__main__':
-    target = u0_2 # тут задаётся начальное условие
+    target = u0_1 # тут задаётся начальное условие
 
     grid1, hx, tau = create_grid(w, h, n, m, target, mu)
     grid2, hx, tau = create_grid(w, h, n, m, target, mu)
@@ -144,7 +144,7 @@ if __name__ == '__main__':
     def update(frame):
         plt.cla()
         ax.plot(x, grid1[frame], '-', label = 'method 1')
-        ax.plot(x, grid2[frame], '-', label = 'method 2')
+        # ax.plot(x, grid2[frame], '-', label = 'method 2')
         # ax.plot(x, grid3[frame], '-', label = 'method 3')
         ax.plot(x, generate_precise(target, a, frame, hx, n, tau), '-', label = 'precise')
         plt.legend()

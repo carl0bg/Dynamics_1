@@ -138,22 +138,13 @@ def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
     print(tabulate(table_data, headers=headers, tablefmt="grid", stralign="center"))
 
 
-# a = 2
-# w = 15
-# total_time = 10
-# n = w * 5  # число пространственных узлов
-# m = total_time * 12  # число временных шагов
-# h_x = w / n #шаг по x 
-# h_t = total_time / m #шаг по времени 
-
 a = 2
 w = 15
-total_time = 10  # Переименовываем переменную, чтобы избежать конфликта с модулем time
-n = w * 120  # число пространственных узлов
-m = total_time * 250  # число временных шагов
-h_x = w / n
-h_t = total_time / m
-
+total_time = 10
+n = w * 5  # число пространственных узлов
+m = total_time * 12  # число временных шагов
+h_x = w / n #шаг по x 
+h_t = total_time / m #шаг по времени 
 
 
 if __name__ == '__main__':

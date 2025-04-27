@@ -46,14 +46,9 @@ def u0_3(x):
         return 1 - x**2  # функция для половины параболы
 
 
-# def mu(t):
-#     return u0_0(-t / a)
-
-# def mu(t):
-#     return u0_3(-a * t)
-
 def mu(t):
     return 0
+
 
 def solve1(grid, a, h, tau):
     for t in range(1, len(grid)):
@@ -113,9 +108,7 @@ def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
     indices = range(0, len(x_vals), step_size)
     
     table_data = []
-    headers = ["x (шаг h_x={:.4f})".format(h_x if False else 0.0417), "Method 1", "Method 2", "Precise", "delta 1", "delta 2"]
-    # headers = ["x (шаг h_x={:.4f})".format(h_x if False else 0.419), "Method 1", "Method 2", "Precise", "delta 1", "delta 2"]
-
+    headers = ["x (шаг h_x={:.4f})".format(h_x if False else 0.419), "Method 1", "Method 2", "Precise", "delta 1", "delta 2"]
     
     for i in indices:
         x = x_vals[i]
@@ -133,18 +126,9 @@ def print_comparison_table(step, x_vals, method1, method2, precise, h_x, h_t):
             f"{error2:.4f}"
         ])
     
-    # print(f"\nCравнение на шаге {step} t = {step*h_t:.2f}, h_t = {h_t:.4f}:")
     print(f"\n t = {step*h_t:.2f}, h_t = {h_t:.4f}:")
     print(tabulate(table_data, headers=headers, tablefmt="grid", stralign="center"))
 
-
-# a = 2
-# w = 15
-# total_time = 10
-# n = w * 5  # число пространственных узлов
-# m = total_time * 12  # число временных шагов
-# h_x = w / n #шаг по x 
-# h_t = total_time / m #шаг по времени 
 
 a = 2
 w = 15
@@ -155,9 +139,8 @@ h_x = w / n
 h_t = total_time / m
 
 
-
 if __name__ == '__main__':
-    target = u0_0
+    target = u0_3
     grid1, hx, tau = create_grid(w, total_time, n, m, target, mu)
     grid2, hx, tau = create_grid(w, total_time, n, m, target, mu)
     
@@ -174,14 +157,15 @@ if __name__ == '__main__':
     
     x_vals = np.linspace(0, w, n)
     
-    steps_per_second = int(1 / h_t)
-    for second in range(1, total_time + 1):
-        step = second * steps_per_second
-        if step >= m:
-            break
-        precise_solution = generate_precise(target, a, step, hx, n, tau)
-        print_comparison_table(step, x_vals, grid1[step], grid2[step], precise_solution, h_x, h_t)
+    # Находим кадр, соответствующий t = 2
+    target_time = 2.0
+    target_frame = int(target_time / h_t)
     
+    # Выводим таблицу сравнения только для t = 2
+    precise_solution = generate_precise(target, a, target_frame, hx, n, tau)
+    print_comparison_table(target_frame, x_vals, grid1[target_frame], grid2[target_frame], precise_solution, h_x, h_t)
+    
+    # Оставляем оригинальную анимацию, но она будет работать как прежде
     fig, ax = plt.subplots()
     x = np.linspace(0, w, n)
     ax.xaxis.set_major_locator(plt.MultipleLocator(1))
@@ -194,8 +178,9 @@ if __name__ == '__main__':
         ax.plot(x, generate_precise(target, a, frame, hx, n, tau), ':', color='red', label='precise')
         plt.legend()
         
-        if abs(current_time - 4) < h_t/2:
-            plt.pause(10)
+        # Останавливаем анимацию на 2 секунде
+        if abs(current_time - 2.0) < h_t/2:
+            plt.pause(10)  # Пауза на 10 секунд
 
     ani = animation.FuncAnimation(fig, update, frames=m, interval=30)
     plt.show()
