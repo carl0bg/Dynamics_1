@@ -93,16 +93,13 @@ def solve(grid, a, h, tau):
         solve_single(t, grid, a, h, tau)
 
 def print_solution_table(time_step, x_vals, solution, h_x, h_t):
-    step_size = 5  # Шаг для вывода (чтобы таблица не была слишком большой)
-    indices = range(0, len(x_vals), step_size)
-    
     table_data = []
     headers = [
         "x (шаг h_x={:.4f})".format(h_x),
         "Значение u(x, t={:.2f})".format(time_step * h_t)
     ]
     
-    for i in indices:
+    for i in range(len(x_vals)):
         x = x_vals[i]
         val = solution[i]
         table_data.append([
@@ -110,7 +107,6 @@ def print_solution_table(time_step, x_vals, solution, h_x, h_t):
             f"{val:.6f}"
         ])
     
-    # print(f"\nРешение на временном шаге {time_step} (t = {time_step*h_t:.2f}):")
     print(f"\n t = {time_step*h_t:.2f}, h_t = {h_t:.4f}:")
     print(tabulate(table_data, headers=headers, tablefmt="grid", stralign="center"))
 
@@ -123,7 +119,7 @@ h_x = w / n
 h_t = total_time / m
 
 if __name__ == '__main__':
-    target = u0_0
+    target = u0_3
 
     grid, hx, tau = create_grid(w, total_time, n, m, target, mu)
 
@@ -159,7 +155,6 @@ if __name__ == '__main__':
         plt.title(f"t = {tau * frame:.2f}")
         ax.plot(x, grid[frame], '-')
         plt.legend()
-
 
     if False:
         ani = animation.FuncAnimation(fig, update, frames=m, interval=30, repeat=False)
